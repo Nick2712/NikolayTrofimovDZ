@@ -8,20 +8,16 @@ namespace Asteroids
     {
         private void Start()
         {
-        }
-
-        private void ExamplePool()
-        {
             EnemyPool enemyPool = new EnemyPool(5);
-            var enemy = enemyPool.GetEnemy("Asteroid");
+            var enemy = enemyPool.GetEnemy(NameManager.ASTEROID);
             enemy.transform.position = Vector3.one;
             enemy.gameObject.SetActive(true);
 
-            System.Threading.ThreadPool.QueueUserWorkItem(state => Debug.Log("Test"));
-        }
+            var enemyShip = enemyPool.GetEnemy(NameManager.ENEMY_SHIP);
+            enemyShip.transform.position = Vector3.one * 2;
+            enemyShip.gameObject.SetActive(true);
 
-        private void ExampleFactory()
-        {
+            return;
             Enemy.CreateAsteroidEnemy(new Health(100.0f, 100.0f));
 
             IEnemyFactory factory = new AsteroidFactory();
@@ -29,9 +25,10 @@ namespace Asteroids
 
             Enemy.Factory.Create(new Health(100.0f, 100.0f));
 
-            new PlatformFactory().Create(Application.platform);
 
-            System.Threading.Tasks.Task.Factory.StartNew(() => Debug.Log("Test"));
+            var platform = new PlatformFactory().Create(Application.platform);
+
+            System.Threading.ThreadPool.QueueUserWorkItem(state => Debug.Log("Test"));
         }
     }
 }

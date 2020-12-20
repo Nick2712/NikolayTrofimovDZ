@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Asteroids.Object_Pool
 {
-    internal sealed class EnemyPool
+    public sealed class EnemyPool
     {
         private readonly Dictionary<string, HashSet<Enemy>> _enemyPool;
         private readonly int _capacityPool;
@@ -28,8 +28,11 @@ namespace Asteroids.Object_Pool
             Enemy result;
             switch (type)
             {
-                case "Asteroid":
+                case NameManager.ASTEROID:
                     result = GetAsteroid(GetListEnemies(type));
+                    break;
+                case NameManager.ENEMY_SHIP:
+                    result = GetEnemyShip(GetListEnemies(type));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Не предусмотрен в программе");
@@ -57,6 +60,25 @@ namespace Asteroids.Object_Pool
                 }
 
                 GetAsteroid(enemies);
+            }
+            enemy = enemies.FirstOrDefault(a => !a.gameObject.activeSelf);
+            return enemy;
+        }
+
+        private Enemy GetEnemyShip(HashSet<Enemy> enemies)
+        {
+            var enemy = enemies.FirstOrDefault(a => !a.gameObject.activeSelf);
+            if (enemy == null)
+            {
+                var laser = Resources.Load<EnemyShip>("Enemy/EnemyShip");
+                for (var i = 0; i < _capacityPool; i++)
+                {
+                    var instantiate = Object.Instantiate(laser);
+                    ReturnToPool(instantiate.transform);
+                    enemies.Add(instantiate);
+                }
+
+                GetEnemyShip(enemies);
             }
             enemy = enemies.FirstOrDefault(a => !a.gameObject.activeSelf);
             return enemy;

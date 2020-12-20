@@ -44,7 +44,36 @@ namespace Asteroids
         
             return enemy;
         }
+
+        public static Enemy CreateAsteroidEnemyWithPool(EnemyPool enemyPool, Health hp)
+        {
+            var enemy = enemyPool.GetEnemy(NameManager.ASTEROID);
+            enemy.transform.position = Vector3.one;
+            enemy.gameObject.SetActive(true);
+            enemy._health = hp;
         
+            return enemy;
+        }
+
+        public static EnemyShip CreateEnemyShip(Health hp)
+        {
+            var enemy = Instantiate(Resources.Load<EnemyShip>("Enemy/EnemyShip"));
+
+            enemy.Health = hp;
+
+            return enemy;
+        }
+
+        public static Enemy CreateEnemyShipWithPool(EnemyPool enemyPool, Health hp)
+        {
+            var enemy = enemyPool.GetEnemy(NameManager.ENEMY_SHIP);
+            enemy.transform.position = Vector3.one;
+            enemy.gameObject.SetActive(true);
+            enemy._health = hp;
+
+            return enemy;
+        }
+
         private void ActiveEnemy(Vector3 position, Quaternion rotation)
         {
             transform.localPosition = position;
