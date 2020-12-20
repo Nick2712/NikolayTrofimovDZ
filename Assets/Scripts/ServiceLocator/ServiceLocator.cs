@@ -18,7 +18,8 @@ namespace Asteroids.ServiceLocator
         }
  
         public static T Resolve<T>()
-        { var type = typeof(T);
+        { 
+            var type = typeof(T);
 
             if (_serviceСontainer.ContainsKey(type))
             {

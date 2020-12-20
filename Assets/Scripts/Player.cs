@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace Asteroids
 {
     internal sealed class Player : MonoBehaviour
@@ -12,6 +13,8 @@ namespace Asteroids
         [SerializeField] private Transform _barrel;
         [SerializeField] private float _force;
         [SerializeField] private float _cameraOffset = 10.0f;
+        [SerializeField] private int _maxBulletCount = 4;
+        [SerializeField] private float _bulletLifeTime = 4.0f;
         private Camera _camera;
         private Vector3 _cameraPosition;
         private Ship _ship;
@@ -26,8 +29,12 @@ namespace Asteroids
             var moveTransform = new AccelerationMove(transform, _speed, _acceleration);
             var rotation = new RotationShip(transform);
             _ship = new Ship(moveTransform, rotation);
-            _bulletPool = new BulletPool(4);
-            _updatables = _bulletPool.GetBulletsArray();
+            //_bulletPool = new BulletPool(_maxBulletCount, _bulletLifeTime);
+            //_updatables = _bulletPool.GetBulletsArray();
+
+            ServiceLocator.ServiceLocator.SetService<BulletPool>(
+                new BulletPool(_maxBulletCount, _bulletLifeTime));
+            _updatables = ServiceLocator.ServiceLocator.Resolve<BulletPool>().GetBulletsArray();
         }
 
         private void Update()
@@ -50,9 +57,8 @@ namespace Asteroids
 
             if (Input.GetButtonDown("Fire1"))
             {
-                //var temAmmunition = Instantiate(_bullet, _barrel.position, _barrel.rotation);
-                //temAmmunition.AddForce(_barrel.up * _force);
-                _bulletPool.GetBullet(_barrel, _barrel.up * _force);
+                //_bulletPool.GetBullet(_barrel, _barrel.up * _force);
+                ServiceLocator.ServiceLocator.Resolve<BulletPool>().GetBullet(_barrel, _barrel.up * _force);
             }
 
             _deltaTime = Time.deltaTime;
