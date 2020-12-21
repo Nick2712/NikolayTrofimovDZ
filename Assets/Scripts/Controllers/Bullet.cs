@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Asteroids
 {
-    public class BulletController : IUpdatable
+    public class Bullet : IUpdatable
     {
         private readonly GameObject _bullet;
         private readonly float _bulletLifeTime;
@@ -19,7 +19,7 @@ namespace Asteroids
             }
         }
 
-        public BulletController(GameObject bullet, float bulletLifeTime)
+        public Bullet(GameObject bullet, float bulletLifeTime)
         {
             _bullet = bullet;
             _bulletLifeTime = bulletLifeTime;

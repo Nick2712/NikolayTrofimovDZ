@@ -8,12 +8,12 @@ namespace Asteroids
 {
     public class BulletPool
     {
-        private readonly BulletController[] _bulletsPool;
+        private readonly Bullet[] _bulletsPool;
         private readonly Transform _bulletRootPool;
 
         public BulletPool(int capacityPool, float bulletLifeTime)
         {
-            _bulletsPool = new BulletController[capacityPool];
+            _bulletsPool = new Bullet[capacityPool];
             if (!_bulletRootPool)
             {
                 _bulletRootPool = new GameObject(NameManager.BULLET_POOL_AMMUNITION).transform;
@@ -23,7 +23,7 @@ namespace Asteroids
             for (int i = 0; i < _bulletsPool.Length; i++)
             {
                 var instantiate = UnityEngine.Object.Instantiate(bullet);
-                var bulletController = new BulletController(instantiate, bulletLifeTime);
+                var bulletController = new Bullet(instantiate, bulletLifeTime);
                 ReturnToPool(instantiate.transform);
                 _bulletsPool[i] = bulletController;
             }
@@ -37,7 +37,7 @@ namespace Asteroids
             transform.SetParent(_bulletRootPool);
         }
 
-        public BulletController GetBullet(Transform startPosition, Vector2 force)
+        public Bullet GetBullet(Transform startPosition, Vector2 force)
         {
             int currentBulletInPool = 0;
             int oldestBulletIndex = 0;
@@ -56,13 +56,13 @@ namespace Asteroids
             return LaunchBullet(_bulletsPool[oldestBulletIndex], startPosition, force);
         }
 
-        public BulletController LaunchBullet(BulletController bullet, Transform startPosition, Vector2 force)
+        public Bullet LaunchBullet(Bullet bullet, Transform startPosition, Vector2 force)
         {
             bullet.BulletActivate(force, startPosition);
             return bullet;
         }
 
-        public BulletController[] GetBulletsArray()
+        public Bullet[] GetBulletsArray()
         {
             return _bulletsPool;
         }
