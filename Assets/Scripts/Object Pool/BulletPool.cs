@@ -19,12 +19,9 @@ namespace Asteroids
                 _bulletRootPool = new GameObject(NameManager.BULLET_POOL_AMMUNITION).transform;
             }
 
-            var bullet = Resources.Load<GameObject>("Bullets/Bullet");
             for (int i = 0; i < _bulletsPool.Length; i++)
             {
-                var instantiate = UnityEngine.Object.Instantiate(bullet);
-                var bulletController = new Bullet(instantiate, bulletLifeTime);
-                ReturnToPool(instantiate.transform);
+                var bulletController = new Bullet(bulletLifeTime);
                 _bulletsPool[i] = bulletController;
             }
         }

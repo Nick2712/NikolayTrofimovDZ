@@ -19,9 +19,11 @@ namespace Asteroids
             }
         }
 
-        public Bullet(GameObject bullet, float bulletLifeTime)
+        public Bullet(float bulletLifeTime)
         {
-            _bullet = bullet;
+            var bullet = Resources.Load<GameObject>("Bullets/Bullet");
+            var instantiate = UnityEngine.Object.Instantiate(bullet);
+            _bullet = instantiate;
             _bulletLifeTime = bulletLifeTime;
             _rigidbody = _bullet.GetComponent<Rigidbody2D>();
         }
